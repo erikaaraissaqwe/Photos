@@ -10,6 +10,7 @@ import br.edu.ifsp.scl.photos.adapter.PhotosAdapter
 import br.edu.ifsp.scl.photos.databinding.ActivityMainBinding
 import br.edu.ifsp.scl.photos.model.PhotosItem
 import br.edu.ifsp.scl.photos.service.PhotosJsonAPI
+import com.bumptech.glide.Glide
 
 class MainActivity : AppCompatActivity() {
     private val activityMainBinding  by lazy {
@@ -41,6 +42,18 @@ class MainActivity : AppCompatActivity() {
                     id: Long
                 ) {
                     // preencher imagens 1 e 2 aqui
+                    val selectedPhotosItem = photosAdapter.getItem(position)
+
+                    selectedPhotosItem?.let {
+                        // Carregue as imagens usando Glide
+                        Glide.with(this@MainActivity)
+                            .load(it.url)
+                            .into(activityMainBinding.imageOne)
+
+                        Glide.with(this@MainActivity)
+                            .load(it.thumbnailUrl)
+                            .into(activityMainBinding.imageTwo)
+                    }
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
