@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Photos</string>
+    <string name="request_problem">Houve um probleminha. Tente novamente.</string>
+</resources>
