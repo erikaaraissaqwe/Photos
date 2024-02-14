@@ -6,4 +6,8 @@ data class PhotosItem(
     val thumbnailUrl: String,
     val title: String,
     val url: String
-)
+) {
+    override fun toString(): String {
+        return title
+    }
+}
