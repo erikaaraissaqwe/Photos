@@ -1,15 +1,18 @@
 package br.edu.ifsp.scl.photos.ui
 
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ImageView
 import android.widget.Toast
 import br.edu.ifsp.scl.photos.R
 import br.edu.ifsp.scl.photos.adapter.PhotosAdapter
 import br.edu.ifsp.scl.photos.databinding.ActivityMainBinding
 import br.edu.ifsp.scl.photos.model.PhotosItem
 import br.edu.ifsp.scl.photos.service.PhotosJsonAPI
+import com.android.volley.toolbox.ImageRequest
 import com.bumptech.glide.Glide
 
 class MainActivity : AppCompatActivity() {
@@ -46,13 +49,18 @@ class MainActivity : AppCompatActivity() {
 
                     selectedPhotosItem?.let {
                         // Carregue as imagens usando Glide
-                        Glide.with(this@MainActivity)
+                        /*Glide.with(this@MainActivity)
                             .load(it.url)
                             .into(activityMainBinding.imageOne)
 
                         Glide.with(this@MainActivity)
                             .load(it.thumbnailUrl)
-                            .into(activityMainBinding.imageTwo)
+                            .into(activityMainBinding.imageTwo)*/
+
+                        //carregue as imagens fazendo req por volley
+
+                        retrievePhotosImages(activityMainBinding.imageOne, it.url)
+                        retrievePhotosImages(activityMainBinding.imageTwo, it.url)
                     }
                 }
 
@@ -76,5 +84,22 @@ class MainActivity : AppCompatActivity() {
         }).also {
             PhotosJsonAPI.getInstance(this).addToRequestQueue(it)
         }
+    }
+
+    private fun retrievePhotosImages(imageView: ImageView, url: String) {
+        ImageRequest(
+            url, {
+                response ->
+                    imageView.setImageBitmap(response)
+                },
+            0,
+            0,
+            ImageView.ScaleType.CENTER,
+            Bitmap.Config.ARGB_8888,
+            {
+                Toast.makeText(this, getString(R.string.request_problem), Toast.LENGTH_SHORT).show()
+            }).also {
+                PhotosJsonAPI.getInstance(this).addToRequestQueue(it)
+            }
     }
 }
